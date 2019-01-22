@@ -1,13 +1,17 @@
 $navWidth: 600px;
+$hoverColor: #ffac11;
+$titleColor: #999;
+$listColor: #222;
+
 .container {
   width: 100%; // display: flex;
-  min-width: 1200px;
+  min-width: 1000px;
 }
 
 .nav_group {
   width: $navWidth;
   margin: 10px auto;
-  padding: 10px;
+  padding: 10px 0;
   display: flex;
   border-bottom: 2px solid #ccc;
 }
@@ -16,14 +20,46 @@ $navWidth: 600px;
   flex: 1;
   text-align: center;
   span {
-    color: #999;
+    color: $titleColor;
     font-size: 14px;
     cursor: pointer;
     &:hover {
-      color: #ffac11;
+      color: $hoverColor;
     }
   }
   .nav_active {
-    color: #ffac11;
+    color: $hoverColor;
+  }
+}
+
+.list_box {
+  width: $navWidth;
+  margin: 0 auto;
+}
+
+.list_item {
+  display: flex;
+  padding: 15px 0;
+  border-bottom: 1px solid #e2e2e2;
+  cursor: pointer;
+  time {
+    color: #ccc;
+    width: 90px;
+    font-size: 14px;
+    padding-top: 3px;
+  }
+  p {
+    flex: 1;
+    font-size: 18px;
+    line-height: 25px;
+    font-weight: 100;
+    color: $listColor;
+    margin: 0;
+    padding: 0 0 10px 30px;
+  }
+  &:hover {
+    p {
+      color: $hoverColor;
+    }
   }
 }
