@@ -3,12 +3,14 @@
  * @Description: 全局layout
  * @Date: 2019-01-12 16:52:35
  * @Last Modified by: JamesWong
- * @Last Modified time: 2019-01-22 13:52:03
+ * @Last Modified time: 2019-01-24 15:49:31
  */
+import 'antd/dist/antd.css'
 import styles from './index.scss'
 import item from './config/item'
 import Main from './main'
 import router from 'umi/router'
+import { Fragment } from 'react';
 
 require('normalize-css')
 
@@ -21,6 +23,13 @@ function BasicLayout(props) {
       <div className={styles.normal}>
         {props.children}
       </div>
+    )
+  }
+  if (props.location.pathname.slice(0, 5) === '/back') {
+    return (
+      <Fragment>
+        {props.children}
+      </Fragment>
     )
   }
   return (

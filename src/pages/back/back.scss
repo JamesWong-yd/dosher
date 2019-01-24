@@ -1,0 +1,34 @@
+.backlayout {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  .backheader {
+    background: #fff;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, .2);
+    .backlogo {
+      font-size: 18px;
+    }
+  }
+  .breadcrumb {
+    margin: 18px 50px 13px;
+  }
+  .content {
+    flex: 1;
+    overflow: auto;
+    margin: 5px 50px;
+    .content_layout {
+      min-height: 100%;
+      background-color: #fff;
+      padding: 18px 0;
+    }
+    &:hover {
+      box-shadow: 0 1px 6px rgba(0, 0, 0, .2);
+      transition: all 1s;
+    }
+  }
+  .backfooter {
+    text-align: center;
+    color: #999;
+    padding: 10px 50px;
+  }
+}
