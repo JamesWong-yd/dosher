@@ -62,27 +62,27 @@ class backIndex extends Component {
         <Header className={styles.backheader}>
           <span className={styles.backlogo}>Dosher Management</span>
         </Header>
-        <Breadcrumb className={styles.breadcrumb}>
-          {breadcrumbRender}
-        </Breadcrumb>
-        <Content className={styles.content}>
-          <Layout className={styles.content_layout}>
-            <Sider width={200}>
-              <Menu
-                mode="inline"
-                defaultSelectedKeys={state.defaultSelectItem}
-                style={{ height: '100%' }}>
-                {itemMenuRender}
-              </Menu>
-            </Sider>
-            <Content style={{ padding: '0 24px', minHeight: 280 }}>
+        <Layout className={styles.content}>
+          <Sider width={200}>
+            <Menu
+              mode="inline"
+              defaultSelectedKeys={state.defaultSelectItem}
+              style={{ height: '100%' }}>
+              {itemMenuRender}
+            </Menu>
+          </Sider>
+          <Layout>
+            <Breadcrumb className={styles.breadcrumb}>
+              {breadcrumbRender}
+            </Breadcrumb>
+            <Content className={styles.content_layout}>
               {this.props.children}
             </Content>
+            <Footer className={styles.backfooter}>
+              Design By JamesWong.
+            </Footer>
           </Layout>
-        </Content>
-        <Footer className={styles.backfooter}>
-          Design By JamesWong.
-        </Footer>
+        </Layout>
       </Layout>
     )
   }

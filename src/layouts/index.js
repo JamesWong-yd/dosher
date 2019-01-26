@@ -1,16 +1,10 @@
-/*
- * @Author: JamesWong
- * @Description: 全局layout
- * @Date: 2019-01-12 16:52:35
- * @Last Modified by: JamesWong
- * @Last Modified time: 2019-01-24 15:49:31
- */
 import 'antd/dist/antd.css'
 import styles from './index.scss'
 import item from './config/item'
 import Main from './main'
 import router from 'umi/router'
-import { Fragment } from 'react';
+import zhCN from 'antd/lib/locale-provider/zh_CN'
+import { LocaleProvider } from 'antd'
 
 require('normalize-css')
 
@@ -27,9 +21,9 @@ function BasicLayout(props) {
   }
   if (props.location.pathname.slice(0, 5) === '/back') {
     return (
-      <Fragment>
+      <LocaleProvider locale={zhCN}>
         {props.children}
-      </Fragment>
+      </LocaleProvider>
     )
   }
   return (
