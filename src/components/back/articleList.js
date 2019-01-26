@@ -1,18 +1,11 @@
 import styles from './article.scss'
 import { Component, Fragment } from 'react'
 import moment from 'moment'
-import { Form, Tooltip, Icon, Input, Button, DatePicker, Table } from 'antd'
+import { Form, Input, Button, DatePicker, Table } from 'antd'
 import { getArticleList } from '@/api/back/article'
+import { ListState, ListTool } from './listState'
 
 const { RangePicker } = DatePicker
-
-const action = [
-  { icon: 'file-search', type: 'search', title: '查看', color: '#1890ff' },
-  { icon: 'edit', type: 'edit', title: '编辑', color: '#1890ff' },
-  { icon: 'to-top', type: 'totop', title: '置顶', color: '' },
-  { icon: 'file-done', type: 'publish', title: '发布', color: '' },
-  { icon: 'delete', type: 'delete', title: '删除', color: '#ff4d4f' },
-]
 
 export class ArticleList extends Component {
   constructor(props) {
@@ -21,12 +14,13 @@ export class ArticleList extends Component {
       tableLoading: false,
       searchLoading: false,
       resetLoading: false,
+      title: '',
       formdata: {
         page: 1,
         pageSize: 10,
         title: '',
-        startDate: moment().subtract('month', 6).format('YYYY-MM-DD hh:mm:ss'),
-        endDate: moment().format('YYYY-MM-DD hh:mm:ss')
+        startDate: '',
+        endDate: ''
       },
       dataSource: [],
       total: 30
@@ -34,16 +28,20 @@ export class ArticleList extends Component {
   }
 
   UNSAFE_componentWillMount() {
-    this._getArticleList()
+    this.handleReset()
   }
 
   // get list
   async _getArticleList() {
+    this.setState({
+      tableLoading: true
+    })
     let res = await getArticleList(this.state.formdata)
     if (res.state === 'success') {
       this.setState({
         dataSource: res.data,
         total: res.count,
+        tableLoading: false,
         searchLoading: false,
         resetLoading: false
       })
@@ -60,6 +58,7 @@ export class ArticleList extends Component {
   // handle search list
   handleSearch() {
     this.setState({
+      formdata: Object.assign(this.state.formdata, { title: this.state.title }),
       searchLoading: true
     })
     this._getArticleList()
@@ -72,41 +71,54 @@ export class ArticleList extends Component {
       formdata: Object.assign(this.state.formdata, {
         page: 1,
         title: '',
-        startDate: '',
-        endDate: ''
+        startDate: moment().subtract(6, 'month').format('YYYY-MM-DD') + ' 00:00:00',
+        endDate: moment().format('YYYY-MM-DD') + ' 23:59:59'
       })
     })
     this._getArticleList()
   }
-
-  // handle Action
-  handleAction(val, type) {
-    switch (type) {
-      case 'edit':
-
-        break;
-      case 'totop':
-
-        break;
-      case 'publish':
-
-        break;
-      case 'delete':
-
-        break;
-      default:
-        break;
-    }
+  // action look
+  handleLook(val) {
+    console.log('look')
   }
 
   // action edit
+  handleEdit(val) {
+    console.log('edit')
+  }
 
   // action totop
-
+  handleTotop(val) {
+    console.log('totop')
+  }
   // action publish
-
+  handlePublish(val) {
+    console.log('publish')
+  }
   // action delete
+  handleDelete(val) {
+    console.log('delete')
+  }
 
+  // set state
+  setStateSearch(val) {
+    this.setState({
+      formdata: Object.assign(this.state.formdata, val)
+    })
+    this._getArticleList()
+  }
+  // changeTime
+  changeTime(val) {
+    this.setStateSearch({
+      page: 1,
+      startDate: moment(val[0]._d).format(val[0]._f),
+      endDate: moment(val[1]._d).format(val[1]._f),
+    })
+  }
+  // changeTitle
+  changTitle(e) {
+    this.setState({ title: e.target.value })
+  }
 
   render() {
     const state = this.state
@@ -115,26 +127,22 @@ export class ArticleList extends Component {
 
     // defined col
     const columns = [
+      {
+        title: '#', key: 'index', width: '60', render: (row, record, index) => (<span>{(formdata.page - 1) * formdata.pageSize + index + 1}</span>)
+      },
       { title: '标题', dataIndex: 'title' },
       { title: '创建时间', dataIndex: 'create_time', render: text => text ? moment(new Date(text)).format('YYYY-MM-DD HH:mm:ss') : '--' },
       { title: '修改日期', dataIndex: 'time', render: text => text ? moment(new Date(text)).format('YYYY-MM-DD HH:mm:ss') : '--' },
-      { title: '状态', dataIndex: 'flag', render: flag => <div>{flag ? 1 : 2}</div> },
+      { title: '状态', key: 'flag', render: row => (<ListState flag={row.flag} totop={row.totop} />) },
       {
         title: '操作', key: 'operation', fixed: 'right', width: 140, render: row => (
-          < div >
-            {action.map(item =>
-              <Tooltip
-                key={item.title}
-                title={item.title}
-                mouseEnterDelay={0.5}
-                className={styles.row_btn}>
-                <Icon
-                  style={{ color: item.color ? item.color : row.flag ? '#1890ff' : '' }}
-                  type={item.icon}
-                  onClick={this.handleAction.bind(this, row, item.icon)} />
-              </Tooltip>
-            )}
-          </div >
+          <ListTool
+            item={row}
+            onLook={this.handleLook.bind(this, row)}
+            onEdit={this.handleEdit.bind(this, row)}
+            onTotop={this.handleTotop.bind(this, row)}
+            onPublish={this.handlePublish.bind(this, row)}
+            onDelete={this.handleDelete.bind(this, row)} />
         )
       }
     ]
@@ -144,17 +152,22 @@ export class ArticleList extends Component {
         {/* form */}
         <Form layout="inline">
           <Form.Item label="标题">
-            <Input placeholder="请输入标题搜索..." />
+            <Input
+              placeholder="请输入标题搜索..."
+              // value={state.title}
+              onChange={this.changTitle.bind(this)} />
           </Form.Item>
           <Form.Item label="修改日期">
             <RangePicker
               defaultValue={[
-                moment(formdata.startDate, 'YYYY-MM-DD hh:mm:ss'),
-                moment(formdata.endDate, 'YYYY-MM-DD hh:mm:ss')
+                moment(formdata.startDate, 'YYYY-MM-DD HH:mm:ss'),
+                moment(formdata.endDate, 'YYYY-MM-DD HH:mm:ss')
               ]}
+              allowClear={false}
               showTime={{
                 hideDisabledOptions: true,
               }}
+              onOk={this.changeTime.bind(this)}
               format="YYYY-MM-DD HH:mm:ss"
             />
           </Form.Item>

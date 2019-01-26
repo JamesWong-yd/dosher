@@ -8,7 +8,7 @@ export function getArticleList({
   endDate
 }) {
   return fetch({
-    url: '/article',
+    url: '/api/article',
     method: 'get',
     params: {
       page,
