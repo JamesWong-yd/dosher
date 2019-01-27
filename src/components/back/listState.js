@@ -28,8 +28,8 @@ export function ListTool(props) {
         mouseEnterDelay={0.5}
         className={styles.row_btn}>
         <Icon
-          style={{ color: '#1890ff' }}
           type="file-search"
+          style={{ color: '#1890ff' }}
           onClick={props.onLook} />
       </Tooltip>
       {/* edit */}

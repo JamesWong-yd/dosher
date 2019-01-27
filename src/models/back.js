@@ -9,7 +9,7 @@ export default {
     },
     // 面包屑全替换
     changeBreadcrumb(state, { payload: val }) {
-      state.breadcrumb = [val]
+      state.breadcrumb = val
     }
   }
 }

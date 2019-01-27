@@ -4,6 +4,7 @@ import { Layout, Menu, Breadcrumb, Icon } from 'antd';
 import router from 'umi/router'
 import { connect } from 'dva'
 
+const SubMenu = Menu.SubMenu;
 const { Header, Content, Footer, Sider } = Layout;
 
 class backIndex extends Component {
@@ -11,31 +12,73 @@ class backIndex extends Component {
     super(props)
     this.state = {
       itemMenu: [],
-      defaultSelectItem: []
+      defaultSelectItem: [],
+      defaultOpenKeys: []
     }
   }
 
   UNSAFE_componentWillMount() {
     // init
-    let { routes } = this.props.route || []
-    let itemMenu = routes.slice(0, routes.length - 1).sort((a, b) => a.index - b.index)
-    let locationRoutes = this.props.location.pathname
+    let items = this.getMenuItemAndKey()
     this.setState({
-      itemMenu,
-      defaultSelectItem: [locationRoutes]
+      itemMenu: items.itemMenu,
+      defaultSelectItem: items.locationRoutes,
+      defaultOpenKeys: items.openkeys
     })
+
     // patch breadcrumb
     this.props.dispatch({
       type: 'back/changeBreadcrumb',
-      payload: routes.filter(item => item.path === locationRoutes)[0].itemMenu
+      payload: items.payload
     })
   }
 
-  handleItemMenuRouter(val) {
+  // get menuItem
+  getMenuItemAndKey() {
+    let { location } = this.props
+    let { routes } = this.props.route || []
+    let locationRoutes = []
+    let openkeys = []
+    let payload = []
+    //  items
+    let itemMenu = routes.map(item => {
+      if (!item.routes && item.path === location.pathname) {
+        payload.push(item.itemMenu)
+        locationRoutes.push(`item-${item.path}`)
+      }
+      if (item.routes) {
+        payload.push(item.itemMenu)
+        openkeys.push(`subitem-${item.path}`)
+        item.routes = item.routes.slice(0, routes.length - 1).sort((a, b) => a.index - b.index)
+        item.routes.some(subitem => {
+          if (subitem.path === location.pathname) {
+            locationRoutes.push(`item-${subitem.path}`)
+            payload.push(subitem.itemMenu)
+            return true
+          }
+        })
+      }
+      return item
+    }).slice(0, routes.length - 1).sort((a, b) => a.index - b.index)
+
+    return {
+      itemMenu,
+      locationRoutes,
+      openkeys,
+      payload
+    }
+  }
+
+  handleItemMenuRouter(val, subitem) {
     router.push(val.path)
+    let handlePayload = []
+    if (subitem) {
+      handlePayload.push(subitem)
+    }
+    handlePayload.push(val.itemMenu)
     this.props.dispatch({
       type: 'back/changeBreadcrumb',
-      payload: val.itemMenu
+      payload: handlePayload
     })
   }
 
@@ -44,13 +87,32 @@ class backIndex extends Component {
     const { breadcrumb } = this.props
 
     // item Menu
-    const itemMenuRender = state.itemMenu.map(item =>
-      <Menu.Item
-        key={item.path}
-        onClick={this.handleItemMenuRouter.bind(this, item)}>
-        <Icon type={item.icon} />{item.itemMenu}
-      </Menu.Item>
-    )
+    const itemMenuRender = state.itemMenu.map(item => {
+      if (!item.routes) {
+        return (
+          <Menu.Item
+            key={`item-${item.path}`}
+            onClick={this.handleItemMenuRouter.bind(this, item, '')}>
+            <Icon type={item.icon} />{item.itemMenu}
+          </Menu.Item>
+        )
+      } else {
+        return (
+          <SubMenu
+            key={`subitem-${item.path}`}
+            title={<span><Icon type={item.icon} /><span>{item.itemMenu}</span></span>}>
+            {item.routes.map(subitem => (
+              <Menu.Item
+                key={`item-${subitem.path}`}
+                onClick={this.handleItemMenuRouter.bind(this, subitem, item.itemMenu)}>
+                <Icon type={subitem.icon} />{subitem.itemMenu}
+              </Menu.Item>
+            ))}
+          </SubMenu>
+        )
+      }
+
+    })
 
     // breadcrumb
     const breadcrumbRender = breadcrumb.map((item, index) =>
@@ -66,6 +128,7 @@ class backIndex extends Component {
           <Sider width={200}>
             <Menu
               mode="inline"
+              defaultOpenKeys={state.defaultOpenKeys}
               defaultSelectedKeys={state.defaultSelectItem}
               style={{ height: '100%' }}>
               {itemMenuRender}
@@ -91,7 +154,7 @@ class backIndex extends Component {
 function mapStateToProps(state) {
   const { breadcrumb } = state.back
   return {
-    breadcrumb, // 在这return,上面才能获取到
+    breadcrumb
   }
 }
 

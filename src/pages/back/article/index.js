@@ -1,14 +1,14 @@
 /**
  * itemMenu: 文章管理
- * icon: bars
- * index: 20
+ * icon: appstore
+ * index: 10
  */
 import styles from './index.scss'
 import { Component, Fragment } from 'react'
 import { Card, Icon } from 'antd'
 import { ArticleList } from '@/components/back/articleList'
 
-class BackTitle extends Component {
+export default class extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -42,5 +42,3 @@ class BackTitle extends Component {
     )
   }
 }
-
-export default BackTitle
