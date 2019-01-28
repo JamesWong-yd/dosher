@@ -70,7 +70,7 @@ export class ListTool extends Component {
         </Tooltip>
         {/* to top */}
         <Tooltip
-          title={props.item.totop ? '取消置顶' : '置定'}
+          title={props.item.totop ? '取消置顶' : '置顶'}
           mouseEnterDelay={2}
           className={styles.row_btn}>
           <Icon

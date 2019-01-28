@@ -3,6 +3,7 @@ import { Component } from 'react'
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
 import router from 'umi/router'
 import { connect } from 'dva'
+import { getMenuItemAndKey } from '@/utils/utils'
 
 const SubMenu = Menu.SubMenu;
 const { Header, Content, Footer, Sider } = Layout;
@@ -12,80 +13,44 @@ class backIndex extends Component {
     super(props)
     this.state = {
       itemMenu: [],
-      defaultSelectItem: [],
-      defaultOpenKeys: []
+      defaultOpenKeys: [],
+      defaultSelectItem: []
     }
   }
 
   UNSAFE_componentWillMount() {
+    const { props } = this
     // init
-    let items = this.getMenuItemAndKey()
-    this.setState({
-      itemMenu: items.itemMenu,
-      defaultSelectItem: items.locationRoutes,
-      defaultOpenKeys: items.openkeys
-    })
-
+    let items = getMenuItemAndKey(props.location.pathname, props.route.routes)
     // patch breadcrumb
-    this.props.dispatch({
+    props.dispatch({
       type: 'back/changeBreadcrumb',
-      payload: items.payload
+      payload: items
+    })
+    // set store route
+    props.dispatch({
+      type: 'back/initRouter',
+      payload: props.route.routes
+    })
+    this.setState({
+      itemMenu: items.itemMenu
     })
   }
 
-  // get menuItem
-  getMenuItemAndKey() {
-    let { location } = this.props
-    let { routes } = this.props.route || []
-    let locationRoutes = []
-    let openkeys = []
-    let payload = []
-    //  items
-    let itemMenu = routes.map(item => {
-      if (!item.routes && item.path === location.pathname) {
-        payload.push(item.itemMenu)
-        locationRoutes.push(`item-${item.path}`)
-      }
-      if (item.routes) {
-        payload.push(item.itemMenu)
-        openkeys.push(`subitem-${item.path}`)
-        item.routes = item.routes.slice(0, routes.length - 1).sort((a, b) => a.index - b.index)
-        item.routes.some(subitem => {
-          if (subitem.path === location.pathname) {
-            locationRoutes.push(`item-${subitem.path}`)
-            payload.push(subitem.itemMenu)
-            return true
-          }
-        })
-      }
-      return item
-    }).slice(0, routes.length - 1).sort((a, b) => a.index - b.index)
 
-    return {
-      itemMenu,
-      locationRoutes,
-      openkeys,
-      payload
-    }
-  }
 
-  handleItemMenuRouter(val, subitem) {
+  handleItemMenuRouter(val) {
     router.push(val.path)
-    let handlePayload = []
-    if (subitem) {
-      handlePayload.push(subitem)
-    }
-    handlePayload.push(val.itemMenu)
+    let items = getMenuItemAndKey(val.path, this.props.route.routes)
     this.props.dispatch({
       type: 'back/changeBreadcrumb',
-      payload: handlePayload
+      payload: items
     })
   }
 
   render() {
     const state = this.state
-    const { breadcrumb } = this.props
-
+    let { breadcrumb, defaultOpenKeys, defaultSelectItem } = this.props
     // item Menu
     const itemMenuRender = state.itemMenu.map(item => {
       if (!item.routes) {
@@ -128,8 +93,8 @@ class backIndex extends Component {
           <Sider width={200}>
             <Menu
               mode="inline"
-              defaultOpenKeys={state.defaultOpenKeys}
-              defaultSelectedKeys={state.defaultSelectItem}
+              openKeys={defaultOpenKeys}
+              selectedKeys={defaultSelectItem}
               style={{ height: '100%' }}>
               {itemMenuRender}
             </Menu>
@@ -152,9 +117,11 @@ class backIndex extends Component {
 }
 
 function mapStateToProps(state) {
-  const { breadcrumb } = state.back
+  const { breadcrumb, defaultOpenKeys, defaultSelectItem } = state.back
   return {
-    breadcrumb
+    breadcrumb,
+    defaultOpenKeys,
+    defaultSelectItem
   }
 }
 

@@ -1,15 +1,20 @@
 export default {
   state: {
-    breadcrumb: []
+    route: [],
+    breadcrumb: [],
+    defaultSelectItem: [],
+    defaultOpenKeys: []
   },
   reducers: {
-    // 面包屑切入
-    addBreadcrumb(state, { payload: val }) {
-      state.breadcrumb.push(val)
+    // 初始化路由
+    initRouter(state, { payload: val }) {
+      state.route = val
     },
     // 面包屑全替换
     changeBreadcrumb(state, { payload: val }) {
-      state.breadcrumb = val
+      state.breadcrumb = val.breadcrumb
+      state.defaultOpenKeys = val.openkeys
+      state.defaultSelectItem = val.locationRoutes
     }
   }
 }

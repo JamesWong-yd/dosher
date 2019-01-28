@@ -7,8 +7,11 @@ import styles from './index.scss'
 import { Component, Fragment } from 'react'
 import { Card, Icon } from 'antd'
 import { ArticleList } from '@/components/back/articleList'
+import { connect } from 'dva'
+import router from 'umi/router'
+import { getMenuItemAndKey } from '@/utils/utils'
 
-export default class extends Component {
+class Article extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -16,7 +19,13 @@ export default class extends Component {
   }
 
   handleAddItem() {
-    console.log('handleItemAdd')
+    const path = '/back/article/add'
+    router.push(path)
+    let newItem = getMenuItemAndKey(path, this.props.route)
+    this.props.dispatch({
+      type: 'back/changeBreadcrumb',
+      payload: newItem
+    })
   }
 
   render() {
@@ -24,7 +33,7 @@ export default class extends Component {
     const addItem = (
       <span
         className={styles.add}
-        onClick={this.handleAddItem}>
+        onClick={this.handleAddItem.bind(this)}>
         <Icon type="edit" /> 写文章
       </span>
     )
@@ -42,3 +51,12 @@ export default class extends Component {
     )
   }
 }
+
+function mapStateToProps(state) {
+  const { route } = state.back
+  return {
+    route
+  }
+}
+
+export default connect(mapStateToProps)(Article)
