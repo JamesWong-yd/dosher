@@ -1,8 +1,8 @@
 import styles from './article.scss'
 import { Component, Fragment } from 'react'
 import moment from 'moment'
-import { Form, Input, Button, DatePicker, Table } from 'antd'
-import { getArticleList } from '@/api/back/article'
+import { Form, Input, Button, DatePicker, Table, message } from 'antd'
+import { getArticleList, deleteArticle, updateArticleFlag, updateArticleTotop } from '@/api/back/article'
 import { ListState, ListTool } from './listState'
 
 const { RangePicker } = DatePicker
@@ -77,6 +77,7 @@ export class ArticleList extends Component {
     })
     this._getArticleList()
   }
+
   // action look
   handleLook(val) {
     console.log('look')
@@ -88,16 +89,49 @@ export class ArticleList extends Component {
   }
 
   // action totop
-  handleTotop(val) {
-    console.log('totop')
+  async handleTotop(val) {
+    this.setState({
+      tableLoading: true
+    })
+    let res = await updateArticleTotop(
+      Object.assign(val, { totop: !val.totop })
+    )
+    if (res.state === 'success') {
+      message.success(!val.totop ? '取消置顶成功' : '置顶成功')
+      this.setState({
+        formdata: Object.assign(this.state.formdata, { page: 1 })
+      })
+      this._getArticleList()
+    }
   }
+
   // action publish
-  handlePublish(val) {
-    console.log('publish')
+  async handlePublish(val) {
+    this.setState({
+      tableLoading: true
+    })
+    let res = await updateArticleFlag(
+      Object.assign(val, { flag: !val.flag })
+    )
+    if (res.state === 'success') {
+      message.success(!val.flag ? '取消发布成功' : '发布成功')
+      this.setState({
+        formdata: Object.assign(this.state.formdata, { page: 1 })
+      })
+      this._getArticleList()
+    }
   }
+
   // action delete
-  handleDelete(val) {
-    console.log('delete')
+  async handleDelete(val) {
+    let res = await deleteArticle(val._id)
+    if (res.state === 'success') {
+      message.success('删除成功')
+      this.setState({
+        formdata: Object.assign(this.state.formdata, { page: 1 })
+      })
+      this._getArticleList()
+    }
   }
 
   // set state

@@ -6,7 +6,7 @@ const service = axios.create({
 // request拦截器
 service.interceptors.request.use(
   config => {
-    if (config.method) {
+    if (config.method === 'get') {
       config.params = Object.assign(config.params, { t: new Date() * 1 })
     }
     return config
