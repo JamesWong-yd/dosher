@@ -37,8 +37,6 @@ class backIndex extends Component {
     })
   }
 
-
-
   handleItemMenuRouter(val) {
     router.push(val.path)
     let items = getMenuItemAndKey(val.path, this.props.route.routes)

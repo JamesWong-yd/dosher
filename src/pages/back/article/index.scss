@@ -3,3 +3,25 @@
   cursor: pointer;
   vertical-align: middle;
 }
+
+.review {
+  color: #1890ff;
+  cursor: pointer;
+}
+
+.titleinput {
+  width: 50%;
+  max-width: 500px;
+  height: 40px;
+  line-height: 40px;
+  font-size: 20px;
+  border: none;
+  border-bottom: 2px solid #aaa;
+  text-indent: 5px;
+  &:focus {
+    outline: none;
+  }
+  &::-webkit-input-placeholder {
+    color: #e2e2e2;
+  }
+}
