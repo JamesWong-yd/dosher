@@ -2,7 +2,12 @@ import styles from './article.scss'
 import { Component, Fragment } from 'react'
 import moment from 'moment'
 import { Form, Input, Button, DatePicker, Table, message } from 'antd'
-import { getArticleList, deleteArticle, updateArticleFlag, updateArticleTotop } from '@/api/back/article'
+import {
+  getArticleList,
+  deleteArticle,
+  updateArticleFlag,
+  updateArticleTotop
+} from '@/api/back/article'
 import { ListState, ListTool } from './listState'
 
 const { RangePicker } = DatePicker
