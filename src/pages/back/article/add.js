@@ -5,7 +5,7 @@
  */
 import styles from './index.scss'
 import { Component, Fragment } from 'react'
-import { Card, Row, Col, Button, Form, Radio, Input, Drawer } from 'antd'
+import { Card, Row, Col, Button, Form, Radio, Input } from 'antd'
 import ReactMarkdown from 'react-markdown'
 import { createArticle } from '@/api/back/article'
 import CodeBlock from '@/utils/codeblock'
@@ -28,9 +28,9 @@ export default class extends Component {
   }
 
   // handle visible
-  handleReviewVisible() {
+  handleReviewVisible(val) {
     this.setState({
-      reviewVisible: true
+      reviewVisible: val
     })
   }
 
@@ -69,14 +69,24 @@ export default class extends Component {
       wrapperCol: { span: 14 },
     }
 
-    const extraBtn = (
-      <div
-        className={styles.review}
-        onClick={this.handleReviewVisible.bind(this)}>
-        预览
+    const extraBtn = !state.reviewVisible ? (
+      <div>
+        <div
+          className={styles.review}
+          onClick={this.handleReviewVisible.bind(this, true)}>
+          预览
+            </div>
       </div>
-    )
-
+    ) :
+      (
+        <div>
+          <div
+            className={styles.review}
+            onClick={this.handleReviewVisible.bind(this, false)}>
+            关闭预览
+          </div>
+        </div>
+      )
 
     // review
     const ReviewCard = (
@@ -155,7 +165,6 @@ export default class extends Component {
             {OperateCard}
           </Col>
         </Row>
-
       </Fragment>
     )
   }

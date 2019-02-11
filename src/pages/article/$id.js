@@ -1,4 +1,5 @@
-import { Component } from "react";
+import { Component } from "react"
+import ArticleView from '@/components/articleView/index'
 
 class Article extends Component {
 
@@ -8,7 +9,9 @@ class Article extends Component {
   }
   render() {
     return (
-      <div> about {this.props.computedMatch.params.id}</div>
+      <div>
+        <ArticleView />
+      </div>
     )
   }
 }

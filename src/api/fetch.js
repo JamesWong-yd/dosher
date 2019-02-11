@@ -7,6 +7,9 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     if (config.method === 'get') {
+      if (!config.params) {
+        config.params = {}
+      }
       config.params = Object.assign(config.params, { t: new Date() * 1 })
     }
     return config

@@ -1,7 +1,8 @@
 import styles from './article.scss'
 import { Component, Fragment } from 'react'
 import moment from 'moment'
-import { Form, Input, Button, DatePicker, Table, message } from 'antd'
+import ArticleView from '@/components/articleView/index'
+import { Form, Input, Button, DatePicker, Table, message, Modal } from 'antd'
 import {
   getArticleList,
   deleteArticle,
@@ -28,7 +29,9 @@ export class ArticleList extends Component {
         endDate: ''
       },
       dataSource: [],
-      total: 30
+      total: 0,
+      modalVisible: false,
+      lookId: ''
     }
   }
 
@@ -78,14 +81,18 @@ export class ArticleList extends Component {
         title: '',
         startDate: moment().subtract(6, 'month').format('YYYY-MM-DD') + ' 00:00:00',
         endDate: moment().format('YYYY-MM-DD') + ' 23:59:59'
-      })
+      }),
+      title: ''
     })
     this._getArticleList()
   }
 
   // action look
   handleLook(val) {
-    console.log('look')
+    this.setState({
+      modalVisible: true,
+      lookId: val._id
+    })
   }
 
   // action edit
@@ -137,6 +144,12 @@ export class ArticleList extends Component {
       })
       this._getArticleList()
     }
+  }
+
+  handleCloseModal() {
+    this.setState({
+      modalVisible: false
+    })
   }
 
   // set state
@@ -193,7 +206,7 @@ export class ArticleList extends Component {
           <Form.Item label="标题">
             <Input
               placeholder="请输入标题搜索..."
-              // value={state.title}
+              value={state.title}
               onChange={this.changTitle.bind(this)} />
           </Form.Item>
           <Form.Item label="修改日期">
@@ -236,6 +249,20 @@ export class ArticleList extends Component {
             onChange: this.handlePageChange.bind(this)
           }}
           size="middle" />
+        {/* look */}
+        <Modal
+          destroyOnClose
+          centered
+          width="700px"
+          visible={state.modalVisible}
+          onCancel={this.handleCloseModal.bind(this)}
+          footer={null}>
+          <div
+            className={styles.modal}>
+            <ArticleView
+              id={state.lookId} />
+          </div>
+        </Modal>
       </Fragment>
     )
   }

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import hljs from 'highlight.js'
-import 'highlight.js/styles/atom-one-dark.css'
+import 'highlight.js/styles/atom-one-dark-reasonable.css'
 
 class CodeBlock extends PureComponent {
   constructor(props) {
