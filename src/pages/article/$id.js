@@ -7,10 +7,16 @@ class Article extends Component {
     super(props)
     this.state = {}
   }
+
+  UNSAFE_componentWillMount() {
+    console.log(this.props.computedMatch)
+  }
+
   render() {
+    const { id } = this.props.computedMatch.params
     return (
       <div>
-        <ArticleView />
+        <ArticleView id={id} />
       </div>
     )
   }
