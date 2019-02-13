@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { Component } from "react"
 import styles from '../../styles/index.scss'
 
 class About extends Component {
