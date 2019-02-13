@@ -1,0 +1,16 @@
+.back {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 10;
+  cursor: pointer;
+  font-size: 16px;
+  color: #1890ff;
+  border-bottom: 2px solid transparent;
+  i {
+    margin-right: 10px;
+  }
+  &:hover {
+    border-bottom-color: #1890ff;
+  }
+}

@@ -1,5 +1,8 @@
-import { Component } from "react"
+import { Component, Fragment } from "react"
+import router from "umi/router"
+import styles from './index.scss'
 import ArticleView from '@/components/articleView/index'
+import { Icon } from 'antd'
 
 class Article extends Component {
 
@@ -8,16 +11,25 @@ class Article extends Component {
     this.state = {}
   }
 
-  UNSAFE_componentWillMount() {
-    console.log(this.props.computedMatch)
+  handleBack() {
+    router.push('/article')
   }
 
   render() {
     const { id } = this.props.computedMatch.params
-    return (
-      <div>
-        <ArticleView id={id} />
+    const backToList = (
+      <div
+        className={styles.back}
+        onClick={this.handleBack}>
+        <Icon type="left" />
+        back
       </div>
+    )
+    return (
+      <Fragment>
+        {backToList}
+        <ArticleView id={id} />
+      </Fragment>
     )
   }
 }

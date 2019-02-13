@@ -1,4 +1,5 @@
 import { Component } from "react";
+import styles from '../../styles/index.scss'
 
 class About extends Component {
 
@@ -8,7 +9,7 @@ class About extends Component {
   }
   render() {
     return (
-      <div>about</div>
+      <div className={styles.about_box}>about</div>
     )
   }
 }

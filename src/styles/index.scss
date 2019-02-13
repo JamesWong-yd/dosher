@@ -2,23 +2,22 @@ $navWidth: 600px;
 $hoverColor: #ffac11;
 $titleColor: #999;
 $listColor: #222;
-
 .container {
-  width: 100%; // display: flex;
-  min-width: 1000px;
+  position: fixed;
+  left: 0;
+  top: 20px;
 }
 
-.nav_group {
-  width: $navWidth;
-  margin: 10px auto;
-  padding: 10px 0;
-  display: flex;
-  border-bottom: 2px solid #ccc;
+.title {
+  font-size: 26px;
+  font-weight: 100;
+  margin: 0 0 30px;
+  padding: 0 0 0 20px;
 }
 
 .nav_item {
-  flex: 1;
-  text-align: center;
+  padding-left: 20px;
+  line-height: 30px;
   span {
     color: $titleColor;
     font-size: 14px;
@@ -34,7 +33,12 @@ $listColor: #222;
 
 .list_box {
   width: $navWidth;
-  margin: 0 auto;
+  margin: 30px auto;
+}
+
+.about_box {
+  width: 800px;
+  margin: 30px auto;
 }
 
 .list_item {

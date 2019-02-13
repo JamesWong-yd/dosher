@@ -1,17 +1,78 @@
 .articlebox {
   width: 600px;
-  margin: 0 auto;
+  margin: 20px auto 0;
 }
 
 .title {
-  font-size: 24px;
-  margin: 10px 0;
+  font-size: 40px;
 }
 
 .time {
   line-height: 40px;
+  font-size: 14px;
   color: #999;
   margin-bottom: 15px;
 }
 
-.content {}
+.content {
+  font-size: 12px;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-weight: 600;
+  }
+  h1 {
+    font-size: 24px;
+  }
+  h2 {
+    font-size: 20px;
+  }
+  h3 {
+    font-size: 18px;
+  }
+  h4 {
+    font-size: 16px;
+  }
+  h5 {
+    font-size: 14px;
+  }
+  blockquote {
+    border-left: 5px solid red;
+    background: #e1e1e1;
+    padding: 5px;
+    p {
+      margin: 0;
+      padding: 0;
+    }
+  }
+  hr {
+    height: 1px;
+    border: none;
+    border-bottom: 1px solid #e1e1e1;
+  }
+  p,
+  li {
+    code {
+      padding: 2px 4px;
+      background-color: #f6f6f6;
+      border: none;
+      white-space: pre-wrap;
+      vertical-align: middle;
+      color: #c7254e;
+      border-radius: 4px;
+    }
+  }
+  ul {
+    padding-inline-start: 30px;
+    li {
+      line-height: 2;
+    }
+  }
+  a {
+    &:hover {
+      border-bottom: 1px solid #1890ff;
+    }
+  }
+}

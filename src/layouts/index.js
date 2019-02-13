@@ -5,21 +5,27 @@ import Main from './main'
 import router from 'umi/router'
 import zhCN from 'antd/lib/locale-provider/zh_CN'
 import { LocaleProvider } from 'antd'
+import { Fragment } from 'react';
 
 require('normalize-css')
 
 function BasicLayout(props) {
-  if (props.location.pathname === '/') {
+
+  let { pathname } = props.location
+
+  if (pathname === '/') {
     router.replace(item[0].router)
   }
-  if (props.location.pathname === '/login') {
+
+  if (pathname === '/login') {
     return (
-      <div className={styles.normal}>
+      <Fragment className={styles.normal}>
         {props.children}
-      </div>
+      </Fragment>
     )
   }
-  if (props.location.pathname.slice(0, 5) === '/back') {
+
+  if (pathname.slice(0, 5) === '/back') {
     return (
       <LocaleProvider locale={zhCN}>
         {props.children}
@@ -28,11 +34,14 @@ function BasicLayout(props) {
   }
   return (
     <div className={styles.normal}>
-      <h1 className={styles.title}>Dosher</h1>
-      <Main />
+      < Main />
       {props.children}
+      <div className={styles.company}>
+        Design by James Wong.
+      </div>
     </div>
   )
 }
 
-export default BasicLayout;
+
+export default BasicLayout 

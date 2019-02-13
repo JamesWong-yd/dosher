@@ -1,4 +1,5 @@
-import { Component } from "react";
+import { Component } from "react"
+import styles from '../../styles/index.scss'
 
 class Timer extends Component {
 
@@ -8,7 +9,7 @@ class Timer extends Component {
   }
   render() {
     return (
-      <div>timer</div>
+      <div className={styles.about_box}>timer</div>
     )
   }
 }

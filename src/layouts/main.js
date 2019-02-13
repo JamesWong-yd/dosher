@@ -36,6 +36,7 @@ class Index extends Component {
     // return
     return (
       <div className={styles.container}>
+        <h1 className={styles.title}>Dosher</h1>
         <div className={styles.nav_group}>
           {navItem}
         </div>
