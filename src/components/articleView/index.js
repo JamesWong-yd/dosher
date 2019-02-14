@@ -22,6 +22,10 @@ export default class extends Component {
   }
 
   async _getArticle(id) {
+    this.setState({
+      loading: true
+    })
+    let timer = new Date() * 1
     let res = await getArticle(id)
     if (res.state === 'success') {
       this.setState({
@@ -30,9 +34,13 @@ export default class extends Component {
         content: res.data.content
       })
     }
-    this.setState({
-      loading: false
-    })
+    // 延时处理
+    let timeDelay = Math.max(500 - (new Date() * 1 - timer), 1)
+    setTimeout(() => {
+      this.setState({
+        loading: false
+      })
+    }, timeDelay)
   }
 
   render() {

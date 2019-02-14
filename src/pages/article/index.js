@@ -1,6 +1,6 @@
 import styles from '../../styles/index.scss'
 import { Component } from "react"
-import { Empty } from 'antd'
+import { Empty, Skeleton } from 'antd'
 import router from 'umi/router'
 import moment from 'moment'
 import { fontGetArticle } from '@/api/font/article'
@@ -14,7 +14,8 @@ class Article extends Component {
         page: 1,
         pageSize: 10
       },
-      total: 0
+      total: 0,
+      loading: true
     }
   }
 
@@ -23,6 +24,10 @@ class Article extends Component {
   }
   //
   async _getArticleList() {
+    this.setState({
+      loading: true
+    })
+    let timer = new Date() * 1
     let res = await fontGetArticle(this.state.formdata)
     if (res.state === 'success') {
       this.setState({
@@ -30,6 +35,12 @@ class Article extends Component {
         total: res.count
       })
     }
+    let timeDelay = Math.max(500 - (new Date() * 1 - timer), 1)
+    setTimeout(() => {
+      this.setState({
+        loading: false
+      })
+    }, timeDelay)
   }
 
   // 跳转
@@ -40,6 +51,8 @@ class Article extends Component {
   render() {
     // item
     let listItem
+
+    const { state } = this
 
     if (this.state.article.length) {
       listItem = this.state.article.map(item =>
@@ -58,7 +71,11 @@ class Article extends Component {
     // return
     return (
       <div className={styles.list_box}>
-        {listItem}
+        <Skeleton
+          active
+          loading={state.loading}>
+          {listItem}
+        </Skeleton>
       </div>
     )
   }
