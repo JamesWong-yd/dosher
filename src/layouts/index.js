@@ -5,7 +5,7 @@ import Main from './main'
 import router from 'umi/router'
 import zhCN from 'antd/lib/locale-provider/zh_CN'
 import { LocaleProvider } from 'antd'
-import { Fragment } from 'react';
+import { Fragment } from 'react'
 
 require('normalize-css')
 

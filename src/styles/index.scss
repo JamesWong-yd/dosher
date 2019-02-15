@@ -18,13 +18,16 @@ $listColor: #222;
 .nav_item {
   padding-left: 20px;
   line-height: 30px;
+  cursor: pointer;
   span {
     color: $titleColor;
     font-size: 14px;
-    cursor: pointer;
     &:hover {
       color: $hoverColor;
     }
+  }
+  &:hover {
+    background: #efefef;
   }
   .nav_active {
     color: $hoverColor;

@@ -96,7 +96,6 @@ export default class extends Component {
         renderers={{ code: CodeBlock }}
       />
     )
-
     // write
     const WriteCard = (
       <Card

@@ -22,7 +22,7 @@ class Index extends Component {
 
   render() {
     let state = this.state
-    
+
     // items
     const navItem = state.item.map(item =>
       <div

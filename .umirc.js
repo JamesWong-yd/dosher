@@ -8,7 +8,7 @@ export default {
       dva: {
         immer: true
       },
-      dynamicImport: false,
+      dynamicImport: true,
       title: 'dosher',
       dll: false,
       hardSource: false,
@@ -19,4 +19,6 @@ export default {
       },
     }],
   ],
+  hash: true,
+  ignoreMomentLocale: true
 }
